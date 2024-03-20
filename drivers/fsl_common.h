@@ -9,6 +9,8 @@
 #ifndef _FSL_COMMON_H_
 #define _FSL_COMMON_H_
 
+#define	SDK_DELAY_USE_DWT
+
 #include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>

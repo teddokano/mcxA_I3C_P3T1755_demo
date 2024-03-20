@@ -35,7 +35,7 @@ r01lib_start;	/* *** place this word before making instance of r01lib classes **
 	P3T1755		p3t1755( i2c, P3T1755_ADDR_I2C );
 #endif
 
-#define	WAIT_SEC	0.9855
+#define	WAIT_SEC	0.97
 
 
 DigitalOut	r(    RED   );	//	== D5 pin
