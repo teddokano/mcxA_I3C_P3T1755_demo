@@ -13,26 +13,16 @@ r01lib_start;	/* *** place this word before making instance of r01lib classes **
 #include	"temp_sensor/P3T1755.h"
 #include	<time.h>
 
-#define	ENABLE_I3C
-#define	LOWER_I3C_FREQUENCY
-//#define	TARGET_ON_ARDUINO_SHIELD
+#define	USE_I3C
 
-#ifdef	TARGET_ON_ARDUINO_SHIELD
-	#undef	P3T1755_ADDR_I2C
-	#define	P3T1755_ADDR_I2C	0x4C
-#endif
+I3C	i3c( I3C_SDA, I3C_SCL );	//	SDA, SCL
+//I3C		i3c( I3C_SDA, I3C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
+I2C		i2c( I2C_SDA, I2C_SCL );
 
-#ifdef	ENABLE_I3C
-	#ifdef	LOWER_I3C_FREQUENCY
-		I3C		i3c( 400000, 1500000,  4000000 );	//	I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
-	#else
-		I3C			i3c;
-	#endif
-
-	P3T1755		p3t1755( i3c, P3T1755_ADDR_I2C );
+#ifdef	USE_I3C
+P3T1755		p3t1755( i3c, P3T1755_ADDR_I2C );
 #else
-	I2C			i2c;
-	P3T1755		p3t1755( i2c, P3T1755_ADDR_I2C );
+P3T1755		p3t1755( i2c, P3T1755_ADDR_I2C, 0x4C );
 #endif
 
 #define	WAIT_SEC	0.97
@@ -52,7 +42,7 @@ int main(void)
 
 	PRINTF("\r\nP3T1755 (Temperature sensor) I3C operation sample: getting temperature data and IBI\r\n");
 
-#ifdef	ENABLE_I3C
+#ifdef	USE_I3C
 	DAA_set_dynamic_ddress_from_static_ddress( P3T1755_ADDR_I2C, P3T1755_ADDR_I3C );
 	p3t1755.address_overwrite( P3T1755_ADDR_I3C );
 #endif
@@ -69,7 +59,7 @@ int main(void)
 
 	p3t1755.conf( p3t1755.conf() | 0x02 );		//	ALART pin configured to INT mode
 
-#ifdef	ENABLE_I3C
+#ifdef	USE_I3C
 	p3t1755.ccc_set( CCC::DIRECT_ENEC, 0x01 );	// Enable IBI
 #endif
 	p3t1755.info();
