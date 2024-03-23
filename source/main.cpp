@@ -13,16 +13,18 @@ r01lib_start;	/* *** place this word before making instance of r01lib classes **
 #include	"temp_sensor/P3T1755.h"
 #include	<time.h>
 
-#define	USE_I3C
 
-I3C	i3c( I3C_SDA, I3C_SCL );	//	SDA, SCL
-//I3C		i3c( I3C_SDA, I3C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
+//I3C	i3c( I3C_SDA, I3C_SCL );	//	SDA, SCL
+I3C		i3c( I3C_SDA, I3C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
 I2C		i2c( I2C_SDA, I2C_SCL );
 
+#define	USE_I3C
 #ifdef	USE_I3C
 P3T1755		p3t1755( i3c, P3T1755_ADDR_I2C );
 #else
-P3T1755		p3t1755( i2c, P3T1755_ADDR_I2C, 0x4C );
+#undef	P3T1755_ADDR_I2C
+#define	P3T1755_ADDR_I2C	0x4C
+P3T1755		p3t1755( i2c, P3T1755_ADDR_I2C );
 #endif
 
 #define	WAIT_SEC	0.97
