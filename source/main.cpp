@@ -7,8 +7,6 @@
  */
 
 #include	"r01lib.h"
-r01lib_start;	/* *** place this word before making instance of r01lib classes *** */
-
 #include	"pin_control.h"
 #include	"temp_sensor/P3T1755.h"
 #include	<time.h>
@@ -16,6 +14,7 @@ r01lib_start;	/* *** place this word before making instance of r01lib classes **
 
 //I3C	i3c( I3C_SDA, I3C_SCL );	//	SDA, SCL
 I3C		i3c( I3C_SDA, I3C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
+//I3C	i3c( I2C_SDA, I2C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
 I2C		i2c( I2C_SDA, I2C_SCL );
 
 #define	USE_I3C
