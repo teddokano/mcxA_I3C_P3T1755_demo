@@ -1,6 +1,5 @@
 /*
- * Copyright 2022 NXP
- * Copyright 2024 Tedd OKANO
+ * Copyright 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
@@ -11,11 +10,8 @@
 #include	"temp_sensor/P3T1755.h"
 #include	<time.h>
 
-
-//I3C	i3c( I3C_SDA, I3C_SCL );	//	SDA, SCL
-I3C		i3c( I3C_SDA, I3C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
-//I3C	i3c( I2C_SDA, I2C_SCL, 400000, 1500000, 4000000 );	//	SDA, SCL, I2C_FREQ, I3C_OD_FREQ, I3C_PP_FREQ
-I2C		i2c( I2C_SDA, I2C_SCL );
+I3C		i3c( I3C_SDA, I3C_SCL );	//	SDA, SCL
+I2C		i2c( I2C_SDA, I2C_SCL );	//	SDA, SCL
 
 #define	USE_I3C
 #ifdef	USE_I3C
@@ -28,11 +24,10 @@ P3T1755		p3t1755( i2c, P3T1755_ADDR_I2C );
 
 #define	WAIT_SEC	0.97
 
-
-DigitalOut	r(    RED   );	//	== D5 pin
-DigitalOut	g(    GREEN );	//	== D6 pin
-DigitalOut	b(    BLUE  );	//	"BLUE" (D3) is a dummy LED difinition. This pin is overriden by PWM output
-DigitalOut	trig( D2    );	//	IBI detection trigger. Pin D0~D2, D4~D13, D18, D19 and A0~A5 can be used
+DigitalOut	r(    RED   );
+DigitalOut	g(    GREEN );
+DigitalOut	b(    BLUE  );
+DigitalOut	trig( D2    );	//	IBI detection trigger output for oscilloscope
 
 void	DAA_set_dynamic_ddress_from_static_ddress( uint8_t static_address, uint8_t dynamic_address );
 
@@ -47,8 +42,8 @@ int main(void)
 	DAA_set_dynamic_ddress_from_static_ddress( P3T1755_ADDR_I2C, P3T1755_ADDR_I3C );
 	p3t1755.address_overwrite( P3T1755_ADDR_I3C );
 #endif
-	
-	float ref_temp	= p3t1755.temp();
+
+	float ref_temp	= p3t1755;
 	float low		= ref_temp + 1.0;
 	float high		= ref_temp + 2.0;
 
